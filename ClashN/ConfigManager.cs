@@ -106,14 +106,28 @@ namespace ClashN
 
         private void 手动添加ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = true;//该值确定是否可以选择多个文件
+            dialog.Title = "请选择文件夹";
+            dialog.Filter = "所有文件(*.yaml)|*.yaml";
+            string file = string.Empty;
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                 file = dialog.FileName;
+            }
+            if (file != null)
+            {
+                utils.CopyToFile(file, Application.StartupPath + @"/profiles");
+                MessageBox.Show("ADD SUCCESSFUL");
+            }
+            
 
         }
 
         private void btnGetFree_Click(object sender, EventArgs e)
         {
-            YML yml = new YML(Application.StartupPath + @"/config.yaml");
-            string a = yml.read("clash-free");
-            MessageBox.Show(a); 
+            System.Diagnostics.Process.Start("explorer.exe", "https://github.com/vveg26/SelfConfig");
+
         }
 
         private void 添加订阅ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -198,18 +212,16 @@ namespace ClashN
         private void 删除配置文件ToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            string path1 = Application.StartupPath + @"/"+listView1.SelectedItems[0].SubItems[0].Text;
+            string path1 = Application.StartupPath + @"/profiles/"+listView1.SelectedItems[0].SubItems[0].Text;
+            // ...or by using FileInfo instance method.
+            System.IO.FileInfo fi = new System.IO.FileInfo(path1);
             try
             {
-                if (File.Exists(path1))
-                {
-                    File.Delete(path1);
-                }
-                
+                fi.Delete();
             }
-            catch
+            catch (System.IO.IOException ex)
             {
-                
+                Console.WriteLine(ex.Message);
             }
         }
     }

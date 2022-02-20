@@ -39,6 +39,7 @@ namespace ClashN
             this.系统代理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置系统代理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清除系统代理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rulecbx = new System.Windows.Forms.ToolStripComboBox();
             this.控制面板ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sp1 = new System.Windows.Forms.ToolStripSeparator();
             this.订阅管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +50,6 @@ namespace ClashN
             this.订阅转换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trayExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.rulecbx = new System.Windows.Forms.ToolStripComboBox();
             this.menuRight.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.SuspendLayout();
@@ -98,7 +98,7 @@ namespace ClashN
             this.trayExit,
             this.toolStripSeparator1});
             this.trayMenu.Name = "contextMenuStrip1";
-            this.trayMenu.Size = new System.Drawing.Size(211, 234);
+            this.trayMenu.Size = new System.Drawing.Size(182, 206);
             this.trayMenu.Text = "trayIcoMenu";
             // 
             // 系统代理ToolStripMenuItem
@@ -107,13 +107,13 @@ namespace ClashN
             this.设置系统代理ToolStripMenuItem,
             this.清除系统代理ToolStripMenuItem});
             this.系统代理ToolStripMenuItem.Name = "系统代理ToolStripMenuItem";
-            this.系统代理ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.系统代理ToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
             this.系统代理ToolStripMenuItem.Text = "系统代理";
             // 
             // 设置系统代理ToolStripMenuItem
             // 
             this.设置系统代理ToolStripMenuItem.Name = "设置系统代理ToolStripMenuItem";
-            this.设置系统代理ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.设置系统代理ToolStripMenuItem.Size = new System.Drawing.Size(182, 26);
             this.设置系统代理ToolStripMenuItem.Text = "设置系统代理";
             this.设置系统代理ToolStripMenuItem.Click += new System.EventHandler(this.设置系统代理ToolStripMenuItem_Click);
             // 
@@ -122,26 +122,37 @@ namespace ClashN
             this.清除系统代理ToolStripMenuItem.Checked = true;
             this.清除系统代理ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.清除系统代理ToolStripMenuItem.Name = "清除系统代理ToolStripMenuItem";
-            this.清除系统代理ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.清除系统代理ToolStripMenuItem.Size = new System.Drawing.Size(182, 26);
             this.清除系统代理ToolStripMenuItem.Text = "清除系统代理";
             this.清除系统代理ToolStripMenuItem.Click += new System.EventHandler(this.清除系统代理ToolStripMenuItem_Click);
+            // 
+            // rulecbx
+            // 
+            this.rulecbx.Items.AddRange(new object[] {
+            "全局",
+            "规则",
+            "直连"});
+            this.rulecbx.Name = "rulecbx";
+            this.rulecbx.Size = new System.Drawing.Size(121, 28);
+            this.rulecbx.SelectedIndexChanged += new System.EventHandler(this.rulecbx_SelectedIndexChanged);
+            this.rulecbx.Click += new System.EventHandler(this.rulecbx_Click);
             // 
             // 控制面板ToolStripMenuItem
             // 
             this.控制面板ToolStripMenuItem.Name = "控制面板ToolStripMenuItem";
-            this.控制面板ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.控制面板ToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
             this.控制面板ToolStripMenuItem.Text = "控制面板";
             this.控制面板ToolStripMenuItem.Click += new System.EventHandler(this.控制面板ToolStripMenuItem_Click);
             // 
             // sp1
             // 
             this.sp1.Name = "sp1";
-            this.sp1.Size = new System.Drawing.Size(207, 6);
+            this.sp1.Size = new System.Drawing.Size(178, 6);
             // 
             // 订阅管理ToolStripMenuItem
             // 
             this.订阅管理ToolStripMenuItem.Name = "订阅管理ToolStripMenuItem";
-            this.订阅管理ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.订阅管理ToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
             this.订阅管理ToolStripMenuItem.Text = "订阅管理";
             this.订阅管理ToolStripMenuItem.Click += new System.EventHandler(this.订阅管理ToolStripMenuItem_Click);
             // 
@@ -154,7 +165,7 @@ namespace ClashN
             // sp2
             // 
             this.sp2.Name = "sp2";
-            this.sp2.Size = new System.Drawing.Size(207, 6);
+            this.sp2.Size = new System.Drawing.Size(178, 6);
             // 
             // 其他设置ToolStripMenuItem
             // 
@@ -162,7 +173,7 @@ namespace ClashN
             this.开机自启ToolStripMenuItem,
             this.订阅转换ToolStripMenuItem});
             this.其他设置ToolStripMenuItem.Name = "其他设置ToolStripMenuItem";
-            this.其他设置ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.其他设置ToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
             this.其他设置ToolStripMenuItem.Text = "其他设置";
             // 
             // 开机自启ToolStripMenuItem
@@ -182,25 +193,14 @@ namespace ClashN
             // trayExit
             // 
             this.trayExit.Name = "trayExit";
-            this.trayExit.Size = new System.Drawing.Size(210, 24);
+            this.trayExit.Size = new System.Drawing.Size(181, 24);
             this.trayExit.Text = "退出";
             this.trayExit.Click += new System.EventHandler(this.trayExit_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(207, 6);
-            // 
-            // rulecbx
-            // 
-            this.rulecbx.Items.AddRange(new object[] {
-            "全局",
-            "规则",
-            "直连"});
-            this.rulecbx.Name = "rulecbx";
-            this.rulecbx.Size = new System.Drawing.Size(121, 28);
-            this.rulecbx.SelectedIndexChanged += new System.EventHandler(this.rulecbx_SelectedIndexChanged);
-            this.rulecbx.Click += new System.EventHandler(this.rulecbx_Click);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
             // 
             // ClashN
             // 

@@ -10,4 +10,3 @@ last-yamlIndex: 1
 system-proxy: false
 subConvert: https://sub.v1.mk/
 localUI: http://127.0.0.1:9090/ui/
-clash-free: 

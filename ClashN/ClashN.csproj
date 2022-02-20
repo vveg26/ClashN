@@ -67,7 +67,6 @@
     <Compile Include="ClashRestful.cs" />
     <Compile Include="RestfulGo.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="Info.cs" />
     <Compile Include="ConfigManager.cs">
       <SubType>Form</SubType>
     </Compile>
