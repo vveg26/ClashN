@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -66,6 +67,7 @@ namespace ClashN
 
             listView1.BeginInvoke((MethodInvoker)delegate ()
             {
+               
                 Utils utils = new Utils();
                 listView1.Items.Clear();
                 for (int i = 0; i < list.Count; i++)
@@ -126,7 +128,8 @@ namespace ClashN
 
         private void btnGetFree_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "https://github.com/vveg26/SelfConfig");
+
+            backgroundWorker1.RunWorkerAsync();
 
         }
 
@@ -222,6 +225,22 @@ namespace ClashN
             catch (System.IO.IOException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //System.Diagnostics.Process.Start("explorer.exe", "https://github.com/vveg26/SelfConfig");
+            string filePath = Application.StartupPath + @"/config.ini"; //配置文件
+            List<string> urls = new List<string>();
+            urls = utils.ReadIniKeys("Clash", filePath);
+
+
+
+            for (int i = 0; i < urls.Count; i++)
+            {
+                string downloadSavePath = Application.StartupPath + @"/profiles/free" + i + @".yaml";
+                utils.DownloadFile(urls[i], downloadSavePath);
             }
         }
     }

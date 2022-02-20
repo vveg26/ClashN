@@ -4,13 +4,62 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ClashN
 {
     class Utils
-    {   
+    {
+        #region API声明
+        //需要调用GetPrivateProfileString的重载
+        [DllImport("kernel32", EntryPoint = "GetPrivateProfileString")]
+        private static extern long GetPrivateProfileString(string section, string key,
+            string def, StringBuilder retVal, int size, string filePath);
+
+        [DllImport("kernel32", EntryPoint = "GetPrivateProfileString")]
+        private static extern uint GetPrivateProfileStringA(string section, string key,
+            string def, Byte[] retVal, int size, string filePath);
+        #endregion
+        //配置文件路径
+        
+
+        /// <summary>
+        /// 读取ini中的Section中的所有Key和Value
+        /// </summary>
+        /// <param name="SectionName"></param>
+        /// <returns></returns>
+        public List<string> ReadKeys(String SectionName,string filePath)
+        {
+            return ReadIniKeys(SectionName, filePath);
+        }
+        //读取INI文件  
+        public string IniReadValue(string Section, string Key,string filePath)
+        {
+            StringBuilder temp = new StringBuilder(255);
+            GetPrivateProfileString(Section, Key, "", temp, 255, filePath);
+            return temp.ToString();
+        }
+        public List<string> ReadIniKeys(string SectionName, string iniFilename)
+        {
+            List<string> result = new List<string>();
+            Byte[] buf = new Byte[65536];
+            uint len = GetPrivateProfileStringA(SectionName, null, null, buf, buf.Length, iniFilename);
+            int j = 0;
+            for (int i = 0; i < len; i++)
+                if (buf[i] == 0)
+                {
+                    //result.Add(Encoding.Default.GetString(buf, j, i - j)); //获取Key
+                    result.Add(IniReadValue(SectionName, Encoding.Default.GetString(buf, j, i - j),iniFilename));//获取Value
+                    j = i + 1;
+                }
+            return result;
+        }
+
+
+
 
         /// <summary>
         /// 写入第一行
@@ -188,11 +237,11 @@ namespace ClashN
                 //下载uri文件到desPath本地路径
                 try
                 { webClient.DownloadFile(url, path);
-                   System.Windows.Forms.MessageBox.Show("SUCCESS");
+                   System.Windows.Forms.MessageBox.Show("下载成功");
                 }
                 catch
                 {
-                    System.Windows.Forms.MessageBox.Show("UPDATE"+url+"FAILD");
+                    System.Windows.Forms.MessageBox.Show(url+"下载失败");
                 }
             }
         }

@@ -6,7 +6,7 @@ mode: rule
 log-level: info
 external-controller: 127.0.0.1:9090
 last-yaml: xxx.yaml
-last-yamlIndex: 1
+last-yamlIndex: 0
 system-proxy: false
 subConvert: https://sub.v1.mk/
 localUI: http://127.0.0.1:9090/ui/

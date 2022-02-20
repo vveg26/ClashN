@@ -32,21 +32,25 @@ namespace ClashN
                 StreamReader sr =    new StreamReader(path, Encoding.UTF8) ;
                 this.line = sr.ReadLine();
                 sr.Close();
-                String[] kv = Regex.Split(line, ":", RegexOptions.IgnoreCase);
-                findPreSpace(line);
-                Node node = new Node();
-                node.space = findPreSpace(line);
-                node.name = kv[0].Trim();
+                if(line != null)
+                {
+                    String[] kv = Regex.Split(line, ":", RegexOptions.IgnoreCase);
+                    findPreSpace(line);
+                    Node node = new Node();
+                    node.space = findPreSpace(line);
+                    node.name = kv[0].Trim();
 
-                // 去除前后空白符
-                String fline = line.Trim();
-                int first = fline.IndexOf(':');
-                node.value = first == fline.Length - 1 ? null : fline.Substring(first + 2, fline.Length - first - 2);
-                node.parent = findParent(node.space);
-                nodeList.Add(node);
+                    // 去除前后空白符
+                    String fline = line.Trim();
+                    int first = fline.IndexOf(':');
+                    node.value = first == fline.Length - 1 ? null : fline.Substring(first + 2, fline.Length - first - 2);
+                    node.parent = findParent(node.space);
+                    nodeList.Add(node);
 
 
-                this.formatting();
+                    this.formatting();
+                }
+               
             }
             
         }

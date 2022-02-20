@@ -45,6 +45,7 @@
             this.btnOneClickUpdate = new System.Windows.Forms.Button();
             this.btnOpenDir = new System.Windows.Forms.Button();
             this.btnGetFree = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.configMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,33 +100,33 @@
             this.toolStripSeparator1,
             this.添加配置ToolStripMenuItem});
             this.configMenu.Name = "configMenu";
-            this.configMenu.Size = new System.Drawing.Size(211, 134);
+            this.configMenu.Size = new System.Drawing.Size(139, 106);
             // 
             // 启用配置ToolStripMenuItem
             // 
             this.启用配置ToolStripMenuItem.Name = "启用配置ToolStripMenuItem";
-            this.启用配置ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.启用配置ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
             this.启用配置ToolStripMenuItem.Text = "启用配置";
             this.启用配置ToolStripMenuItem.Click += new System.EventHandler(this.启用配置ToolStripMenuItem_Click);
             // 
             // 更新配置ToolStripMenuItem
             // 
             this.更新配置ToolStripMenuItem.Name = "更新配置ToolStripMenuItem";
-            this.更新配置ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.更新配置ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
             this.更新配置ToolStripMenuItem.Text = "更新配置";
             this.更新配置ToolStripMenuItem.Click += new System.EventHandler(this.更新配置ToolStripMenuItem_Click);
             // 
             // 删除配置文件ToolStripMenuItem
             // 
             this.删除配置文件ToolStripMenuItem.Name = "删除配置文件ToolStripMenuItem";
-            this.删除配置文件ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.删除配置文件ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
             this.删除配置文件ToolStripMenuItem.Text = "删除配置";
             this.删除配置文件ToolStripMenuItem.Click += new System.EventHandler(this.删除配置文件ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(207, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
             // 
             // 添加配置ToolStripMenuItem
             // 
@@ -133,20 +134,20 @@
             this.手动添加ToolStripMenuItem,
             this.添加订阅ToolStripMenuItem});
             this.添加配置ToolStripMenuItem.Name = "添加配置ToolStripMenuItem";
-            this.添加配置ToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.添加配置ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
             this.添加配置ToolStripMenuItem.Text = "添加配置";
             // 
             // 手动添加ToolStripMenuItem
             // 
             this.手动添加ToolStripMenuItem.Name = "手动添加ToolStripMenuItem";
-            this.手动添加ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.手动添加ToolStripMenuItem.Size = new System.Drawing.Size(182, 26);
             this.手动添加ToolStripMenuItem.Text = "添加配置文件";
             this.手动添加ToolStripMenuItem.Click += new System.EventHandler(this.手动添加ToolStripMenuItem_Click);
             // 
             // 添加订阅ToolStripMenuItem
             // 
             this.添加订阅ToolStripMenuItem.Name = "添加订阅ToolStripMenuItem";
-            this.添加订阅ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.添加订阅ToolStripMenuItem.Size = new System.Drawing.Size(182, 26);
             this.添加订阅ToolStripMenuItem.Text = "添加订阅";
             this.添加订阅ToolStripMenuItem.Click += new System.EventHandler(this.添加订阅ToolStripMenuItem_Click);
             // 
@@ -182,6 +183,10 @@
             this.btnGetFree.Text = "获取免费订阅";
             this.btnGetFree.UseVisualStyleBackColor = true;
             this.btnGetFree.Click += new System.EventHandler(this.btnGetFree_Click);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
             // ConfigManager
             // 
@@ -219,5 +224,6 @@
         private System.Windows.Forms.ToolStripMenuItem 添加配置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 手动添加ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 添加订阅ToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
