@@ -88,6 +88,7 @@ namespace ClashN
             this.trayMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.系统代理ToolStripMenuItem,
+            this.rulecbx,
             this.控制面板ToolStripMenuItem,
             this.sp1,
             this.订阅管理ToolStripMenuItem,
@@ -95,8 +96,7 @@ namespace ClashN
             this.sp2,
             this.其他设置ToolStripMenuItem,
             this.trayExit,
-            this.toolStripSeparator1,
-            this.rulecbx});
+            this.toolStripSeparator1});
             this.trayMenu.Name = "contextMenuStrip1";
             this.trayMenu.Size = new System.Drawing.Size(211, 234);
             this.trayMenu.Text = "trayIcoMenu";
@@ -168,14 +168,14 @@ namespace ClashN
             // 开机自启ToolStripMenuItem
             // 
             this.开机自启ToolStripMenuItem.Name = "开机自启ToolStripMenuItem";
-            this.开机自启ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.开机自启ToolStripMenuItem.Size = new System.Drawing.Size(152, 26);
             this.开机自启ToolStripMenuItem.Text = "开机自启";
             this.开机自启ToolStripMenuItem.Click += new System.EventHandler(this.开机自启ToolStripMenuItem_Click);
             // 
             // 订阅转换ToolStripMenuItem
             // 
             this.订阅转换ToolStripMenuItem.Name = "订阅转换ToolStripMenuItem";
-            this.订阅转换ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.订阅转换ToolStripMenuItem.Size = new System.Drawing.Size(152, 26);
             this.订阅转换ToolStripMenuItem.Text = "订阅转换";
             this.订阅转换ToolStripMenuItem.Click += new System.EventHandler(this.订阅转换ToolStripMenuItem_Click);
             // 
