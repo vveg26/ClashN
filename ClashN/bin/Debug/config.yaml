@@ -5,7 +5,7 @@ allow-lan: False
 mode: rule
 log-level: info
 external-controller: 127.0.0.1:9090
-last-yaml: 柱头.yaml
+last-yaml: xxx.yaml
 system-proxy: false
 auto-run: false
 subConvert: https://sub.v1.mk/

@@ -69,26 +69,27 @@ namespace ClashN
             writer.Write(payload, 0, payload.Length);
             writer.Close();//关闭请求流
                            // String strValue = "";//strValue为http响应所返回的字符流
-            HttpWebResponse response;
-            try
-            {
-                //获得响应流
-                response = (HttpWebResponse)request.GetResponse();
-            }
-            catch (WebException ex)
-            {
-                response = ex.Response as HttpWebResponse;
-            }
-            Stream s = response.GetResponseStream();
-            //  Stream postData = Request.InputStream;
-            StreamReader sRead = new StreamReader(s);
-            string postContent = sRead.ReadToEnd();
-            sRead.Close();
-            s.Close();
-           
-            
-            response.Close();
-            return postContent;//返回Json数据
+            /*           HttpWebResponse response;
+                       try
+                       {
+                           //获得响应流
+                           response = (HttpWebResponse)request.GetResponse();
+                       }
+                       catch (WebException ex)
+                       {
+                           response = ex.Response as HttpWebResponse;
+                       }
+                       Stream s = response.GetResponseStream();
+                       //  Stream postData = Request.InputStream;
+                       StreamReader sRead = new StreamReader(s);
+                       string postContent = sRead.ReadToEnd();
+                       sRead.Close();
+                       s.Close();
+
+
+                       response.Close();*/
+            //return postContent;//返回Json数据
+            return "111";
 
         }
 

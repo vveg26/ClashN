@@ -166,11 +166,11 @@ namespace ClashN
 
                 });
                 string message = restfulGo.WebPut("http://127.0.0.1:9090/configs?force=false", jsonReloadData);//切换配置文件
-                string yamlPath = Application.StartupPath + @"/config.yaml";
-                YML yml = new YML(yamlPath);
-                yml.modify("last-yaml", fileName);
+               // string yamlPath = Application.StartupPath + @"/config.yaml";
+                //YML yml = new YML(yamlPath);
+                //yml.modify("last-yaml", fileName);
                 //yml.modify("last-yamlIndex", listView1.SelectedItems[0].Index.ToString());
-                yml.save();
+                //yml.save();
                 //new ClashN().configChoose
                 for (int i = 0; i < listView1.Items.Count; i++)
                 {
@@ -178,7 +178,7 @@ namespace ClashN
                 }
                 listView1.SelectedItems[0].SubItems[3].Text = "🐱";
                 //再次调用时 会导致读取两次文件yaml，会造成冲突，一次是listview，一次是combobox，取消掉listview的改变就可
-               //tscb.SelectedIndex = listView1.SelectedItems[0].Index;
+               tscb.SelectedIndex = listView1.SelectedItems[0].Index;
 
             }
 
