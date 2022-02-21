@@ -40,18 +40,16 @@ namespace ClashN
             // 
             // txtYamlName
             // 
-            this.txtYamlName.Location = new System.Drawing.Point(88, 13);
-            this.txtYamlName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtYamlName.Location = new System.Drawing.Point(66, 10);
             this.txtYamlName.Name = "txtYamlName";
-            this.txtYamlName.Size = new System.Drawing.Size(87, 25);
+            this.txtYamlName.Size = new System.Drawing.Size(66, 21);
             this.txtYamlName.TabIndex = 0;
             // 
             // txtSubUrl
             // 
-            this.txtSubUrl.Location = new System.Drawing.Point(88, 55);
-            this.txtSubUrl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSubUrl.Location = new System.Drawing.Point(66, 44);
             this.txtSubUrl.Name = "txtSubUrl";
-            this.txtSubUrl.Size = new System.Drawing.Size(314, 25);
+            this.txtSubUrl.Size = new System.Drawing.Size(236, 21);
             this.txtSubUrl.TabIndex = 1;
             // 
             // contextMenuStrip1
@@ -63,29 +61,26 @@ namespace ClashN
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 18);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(10, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 15);
+            this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 2;
             this.label1.Text = "配置名称";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 58);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(7, 47);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 15);
+            this.label2.Size = new System.Drawing.Size(53, 12);
             this.label2.TabIndex = 3;
             this.label2.Text = "订阅链接";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(88, 98);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Location = new System.Drawing.Point(66, 78);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(133, 50);
+            this.button1.Size = new System.Drawing.Size(100, 40);
             this.button1.TabIndex = 4;
             this.button1.Text = "添加";
             this.button1.UseVisualStyleBackColor = true;
@@ -93,17 +88,17 @@ namespace ClashN
             // 
             // AddSub
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(411, 156);
+            this.ClientSize = new System.Drawing.Size(355, 142);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSubUrl);
             this.Controls.Add(this.txtYamlName);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AddSub";
             this.Text = "添加配置";
+            this.Load += new System.EventHandler(this.AddSub_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -46,6 +46,8 @@
             this.btnOpenDir = new System.Windows.Forms.Button();
             this.btnGetFree = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.更新免费订阅源文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,11 +61,11 @@
             this.listView1.ContextMenuStrip = this.configMenu;
             this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(23, 30);
-            this.listView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.listView1.Location = new System.Drawing.Point(20, 20);
+            this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(935, 195);
+            this.listView1.Size = new System.Drawing.Size(818, 157);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -98,35 +100,36 @@
             this.更新配置ToolStripMenuItem,
             this.删除配置文件ToolStripMenuItem,
             this.toolStripSeparator1,
-            this.添加配置ToolStripMenuItem});
+            this.添加配置ToolStripMenuItem,
+            this.更新免费订阅源文件ToolStripMenuItem});
             this.configMenu.Name = "configMenu";
-            this.configMenu.Size = new System.Drawing.Size(139, 106);
+            this.configMenu.Size = new System.Drawing.Size(185, 142);
             // 
             // 启用配置ToolStripMenuItem
             // 
             this.启用配置ToolStripMenuItem.Name = "启用配置ToolStripMenuItem";
-            this.启用配置ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
+            this.启用配置ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.启用配置ToolStripMenuItem.Text = "启用配置";
             this.启用配置ToolStripMenuItem.Click += new System.EventHandler(this.启用配置ToolStripMenuItem_Click);
             // 
             // 更新配置ToolStripMenuItem
             // 
             this.更新配置ToolStripMenuItem.Name = "更新配置ToolStripMenuItem";
-            this.更新配置ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
+            this.更新配置ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.更新配置ToolStripMenuItem.Text = "更新配置";
             this.更新配置ToolStripMenuItem.Click += new System.EventHandler(this.更新配置ToolStripMenuItem_Click);
             // 
             // 删除配置文件ToolStripMenuItem
             // 
             this.删除配置文件ToolStripMenuItem.Name = "删除配置文件ToolStripMenuItem";
-            this.删除配置文件ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
+            this.删除配置文件ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.删除配置文件ToolStripMenuItem.Text = "删除配置";
             this.删除配置文件ToolStripMenuItem.Click += new System.EventHandler(this.删除配置文件ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
             // 
             // 添加配置ToolStripMenuItem
             // 
@@ -134,29 +137,29 @@
             this.手动添加ToolStripMenuItem,
             this.添加订阅ToolStripMenuItem});
             this.添加配置ToolStripMenuItem.Name = "添加配置ToolStripMenuItem";
-            this.添加配置ToolStripMenuItem.Size = new System.Drawing.Size(138, 24);
+            this.添加配置ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.添加配置ToolStripMenuItem.Text = "添加配置";
             // 
             // 手动添加ToolStripMenuItem
             // 
             this.手动添加ToolStripMenuItem.Name = "手动添加ToolStripMenuItem";
-            this.手动添加ToolStripMenuItem.Size = new System.Drawing.Size(182, 26);
+            this.手动添加ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.手动添加ToolStripMenuItem.Text = "添加配置文件";
             this.手动添加ToolStripMenuItem.Click += new System.EventHandler(this.手动添加ToolStripMenuItem_Click);
             // 
             // 添加订阅ToolStripMenuItem
             // 
             this.添加订阅ToolStripMenuItem.Name = "添加订阅ToolStripMenuItem";
-            this.添加订阅ToolStripMenuItem.Size = new System.Drawing.Size(182, 26);
+            this.添加订阅ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.添加订阅ToolStripMenuItem.Text = "添加订阅";
             this.添加订阅ToolStripMenuItem.Click += new System.EventHandler(this.添加订阅ToolStripMenuItem_Click);
             // 
             // btnOneClickUpdate
             // 
-            this.btnOneClickUpdate.Location = new System.Drawing.Point(23, 244);
-            this.btnOneClickUpdate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnOneClickUpdate.Location = new System.Drawing.Point(20, 195);
+            this.btnOneClickUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btnOneClickUpdate.Name = "btnOneClickUpdate";
-            this.btnOneClickUpdate.Size = new System.Drawing.Size(152, 76);
+            this.btnOneClickUpdate.Size = new System.Drawing.Size(133, 61);
             this.btnOneClickUpdate.TabIndex = 1;
             this.btnOneClickUpdate.Text = "一键更新";
             this.btnOneClickUpdate.UseVisualStyleBackColor = true;
@@ -164,10 +167,10 @@
             // 
             // btnOpenDir
             // 
-            this.btnOpenDir.Location = new System.Drawing.Point(391, 244);
-            this.btnOpenDir.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnOpenDir.Location = new System.Drawing.Point(342, 195);
+            this.btnOpenDir.Margin = new System.Windows.Forms.Padding(2);
             this.btnOpenDir.Name = "btnOpenDir";
-            this.btnOpenDir.Size = new System.Drawing.Size(172, 76);
+            this.btnOpenDir.Size = new System.Drawing.Size(150, 61);
             this.btnOpenDir.TabIndex = 4;
             this.btnOpenDir.Text = "打开目录";
             this.btnOpenDir.UseVisualStyleBackColor = true;
@@ -175,10 +178,10 @@
             // 
             // btnGetFree
             // 
-            this.btnGetFree.Location = new System.Drawing.Point(778, 244);
-            this.btnGetFree.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnGetFree.Location = new System.Drawing.Point(681, 195);
+            this.btnGetFree.Margin = new System.Windows.Forms.Padding(2);
             this.btnGetFree.Name = "btnGetFree";
-            this.btnGetFree.Size = new System.Drawing.Size(180, 76);
+            this.btnGetFree.Size = new System.Drawing.Size(157, 61);
             this.btnGetFree.TabIndex = 7;
             this.btnGetFree.Text = "获取免费订阅";
             this.btnGetFree.UseVisualStyleBackColor = true;
@@ -188,16 +191,29 @@
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
+            // backgroundWorker2
+            // 
+            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            // 
+            // 更新免费订阅源文件ToolStripMenuItem
+            // 
+            this.更新免费订阅源文件ToolStripMenuItem.Name = "更新免费订阅源文件ToolStripMenuItem";
+            this.更新免费订阅源文件ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.更新免费订阅源文件ToolStripMenuItem.Text = "更新免费订阅源文件";
+            this.更新免费订阅源文件ToolStripMenuItem.Click += new System.EventHandler(this.更新免费订阅源文件ToolStripMenuItem_Click);
+            // 
             // ConfigManager
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1016, 350);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(889, 280);
             this.Controls.Add(this.btnGetFree);
             this.Controls.Add(this.btnOpenDir);
             this.Controls.Add(this.btnOneClickUpdate);
             this.Controls.Add(this.listView1);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ConfigManager";
             this.Text = "配置文件管理";
             this.Load += new System.EventHandler(this.ConfigManager_Load);
@@ -225,5 +241,7 @@
         private System.Windows.Forms.ToolStripMenuItem 手动添加ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 添加订阅ToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.ToolStripMenuItem 更新免费订阅源文件ToolStripMenuItem;
     }
 }

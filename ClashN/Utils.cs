@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +14,7 @@ namespace ClashN
 {
     class Utils
     {
-        #region API声明
+        #region 读取Ini文件的操作
         //需要调用GetPrivateProfileString的重载
         [DllImport("kernel32", EntryPoint = "GetPrivateProfileString")]
         private static extern long GetPrivateProfileString(string section, string key,
@@ -22,51 +23,53 @@ namespace ClashN
         [DllImport("kernel32", EntryPoint = "GetPrivateProfileString")]
         private static extern uint GetPrivateProfileStringA(string section, string key,
             string def, Byte[] retVal, int size, string filePath);
-        #endregion
-        //配置文件路径
-        
-
+               
         /// <summary>
-        /// 读取ini中的Section中的所有Key和Value
+        /// 获取指定Section，指定Key的Value
         /// </summary>
-        /// <param name="SectionName"></param>
-        /// <returns></returns>
-        public List<string> ReadKeys(String SectionName,string filePath)
-        {
-            return ReadIniKeys(SectionName, filePath);
-        }
-        //读取INI文件  
-        public string IniReadValue(string Section, string Key,string filePath)
+        /// <param name="Section"></param>
+        /// <param name="Key"></param>
+        /// <param name="iniFilePath">ini文件的地址</param>
+        /// <returns>Value</returns>
+        public string IniReadValue(string Section, string Key,string iniFilePath)
         {
             StringBuilder temp = new StringBuilder(255);
-            GetPrivateProfileString(Section, Key, "", temp, 255, filePath);
+            GetPrivateProfileString(Section, Key, "", temp, 255, iniFilePath);
             return temp.ToString();
         }
-        public List<string> ReadIniKeys(string SectionName, string iniFilename)
+        /// <summary>
+        /// 获取指定Section中的所有键值对
+        /// </summary>
+        /// <param name="SectionName"></param>
+        /// <param name="iniFilePath">ini路径</param>
+        /// <returns>键值对字典</returns>
+        public Dictionary<string, string> IniReadMap(string SectionName, string iniFilePath)
         {
-            List<string> result = new List<string>();
+           // List<string> result = new List<string>();
+            Dictionary<string, string> resultMap = new Dictionary<string, string>();
             Byte[] buf = new Byte[65536];
-            uint len = GetPrivateProfileStringA(SectionName, null, null, buf, buf.Length, iniFilename);
+            uint len = GetPrivateProfileStringA(SectionName, null, null, buf, buf.Length, iniFilePath);
             int j = 0;
             for (int i = 0; i < len; i++)
                 if (buf[i] == 0)
-                {
-                    //result.Add(Encoding.Default.GetString(buf, j, i - j)); //获取Key
-                    result.Add(IniReadValue(SectionName, Encoding.Default.GetString(buf, j, i - j),iniFilename));//获取Value
+                {   
+                    //将键值对存入到字典中
+                    resultMap.Add(Encoding.Default.GetString(buf, j, i - j), IniReadValue(SectionName, Encoding.Default.GetString(buf, j, i - j), iniFilePath));//获取Key和Valuve
+                   // result.Add(IniReadValue(SectionName, Encoding.Default.GetString(buf, j, i - j),iniFilename));//获取Value
                     j = i + 1;
                 }
-            return result;
+            return resultMap;
         }
+        #endregion
 
 
-
-
+        #region 文件操作方法
         /// <summary>
-        /// 写入第一行
+        /// 将文本写入文件的第一行
         /// </summary>
         /// <param name="filenPath">文件名</param>
         /// <param name="str">写入字符串</param>
-        public  void WriteFirstLine(string filePath,string str)
+        public void WriteFirstLine(string filePath,string str)
         {
             string tempfile = Path.GetTempFileName();
             using (var writer = new StreamWriter(tempfile))
@@ -78,32 +81,6 @@ namespace ClashN
             }
             File.Copy(tempfile, filePath, true);
         }
-
-
-        /// <summary>
-        /// 读取json文件
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public string JsonRead(string jsonstr,string key)
-        {
-           
-            JObject obj = JObject.Parse(jsonstr);
-
-            Console.WriteLine(obj.Count);
-            foreach (var x in obj)
-            {
-                if(x.Key == key)
-                {
-                    return x.Value.ToString();
-                    break;
-                }
-            }
-            return null;
-        }
-
-
         /// <summary>
         /// 拷贝文件到另一个文件夹下
         /// </summary>
@@ -138,6 +115,49 @@ namespace ClashN
                 file.CopyTo(targetPath, true);
             }
         }
+        #endregion
+
+        #region Json操作方法
+        /// <summary>
+        /// 读取Json文件的Key和Value
+        /// </summary>
+        /// <param name="jsonstr">json字符串</param>
+        /// <param name="key">Key</param>
+        /// <returns></returns>
+        public string JsonRead(string jsonstr,string key)
+        {
+           
+            JObject obj = JObject.Parse(jsonstr);
+
+            //Console.WriteLine(obj.Count);
+            foreach (var x in obj)
+            {
+                if(x.Key == key)
+                {
+                    return x.Value.ToString();
+                    break;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取json字符串中所有的KV
+        /// </summary>
+        /// <param name="jsonData">json字符串</param>
+        /// <returns>map</returns>
+        public Dictionary<string, string> JsonGetAllKV(string jsonData)
+        {
+            JObject obj = JObject.Parse(jsonData);
+            Dictionary<string, string> map = new Dictionary<string, string>();
+            foreach (var x in obj)
+            {
+                map.Add(x.Key, x.Value.ToString());
+            }
+            return map;
+        }
+        #endregion
+
+
 
 
 
@@ -166,7 +186,7 @@ namespace ClashN
             }
         }
         /// <summary>
-        /// 读取yaml文件中的key
+        /// 读取yaml文件中的Value
         /// </summary>
         /// <param name="key">key</param>
         /// <param name="yamlPath">yaml文件地址</param>
@@ -195,12 +215,6 @@ namespace ClashN
         }
 
 
-        public void WriteLine(string str,string yamlPath)
-        {
-            System.IO.StreamWriter sw = new System.IO.StreamWriter(yamlPath, append:true);
-            sw.WriteLine(str);
-            sw.Close();//写入
-        }
 
 
         /// <summary>
@@ -222,10 +236,7 @@ namespace ClashN
             //p.Close();
         }
 
-        internal void AddYamlSub()
-        {
-            
-        }
+
 
         /// <summary>
         /// 下载文件
@@ -245,5 +256,43 @@ namespace ClashN
                 }
             }
         }
+
+
+        /// <summary>
+        /// 设置开机自启动
+        /// </summary>
+        /// <param name="keyName">目标名</param>
+        /// <param name="filePath">exe路径</param>
+        /// <param name="AddOrCancel">启动或取消</param>
+        /// <returns></returns>
+        public  bool SetAutoRun(string keyName, string filePath, bool AddOrCancel)
+        {
+            try
+            {
+                RegistryKey Local = Registry.LocalMachine;
+                RegistryKey runKey = Local.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\");
+                if (AddOrCancel)
+                {
+                    runKey.SetValue(keyName, filePath);
+                    Local.Close();
+                }
+                else
+                {
+                    if (runKey != null)
+                    {
+                        runKey.DeleteValue(keyName, false);
+                        Local.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+               
+                return false;
+            }
+            return true;
+        }
+
+
     }
 }

@@ -15,11 +15,20 @@ namespace ClashN
 {
     public partial class ConfigManager : Form
     {
+        Form clashN = new Form();
         public ConfigManager()
         {
+            
             InitializeComponent();
         }
 
+        public ConfigManager(ToolStripComboBox tscb)
+        {
+            this.tscb = tscb;
+            InitializeComponent();
+        }
+
+        ToolStripComboBox tscb = new ToolStripComboBox();
         Utils utils = new Utils();
         List<System.IO.FileInfo> files = new List<System.IO.FileInfo>();
         string path = @"./profiles";
@@ -64,10 +73,6 @@ namespace ClashN
         public void ListShow(List<System.IO.FileInfo> list)
         {
 
-
-            listView1.BeginInvoke((MethodInvoker)delegate ()
-            {
-               
                 Utils utils = new Utils();
                 listView1.Items.Clear();
                 for (int i = 0; i < list.Count; i++)
@@ -75,14 +80,14 @@ namespace ClashN
                     string[] item = new string[4];
                     item[0] = list[i].Name;
                     item[1] = list[i].LastWriteTime.ToString();
-                    YML yml = new YML(list[i].FullName,true);
-                   item[2] = yml.read("clash-sub-url");//订阅链接
-                    //item[2] = utils.ReadYamlValue("clash-sub-url", list[i].FullName);
+                    YML yml = new YML(list[i].FullName, true);
+                    item[2] = yml.read("clash-sub-url");//订阅链接
+                                                        //item[2] = utils.ReadYamlValue("clash-sub-url", list[i].FullName);
                     item[3] = " ";
                     listView1.Items.Add(new ListViewItem(item));
                 }
 
-            });
+
 
 
         }
@@ -90,6 +95,15 @@ namespace ClashN
         {
             GetFiles(path, ".yaml", ref files);
             ListShow(files);
+            string lastyaml = new YML(Application.StartupPath+@"/config.yaml").read("last-yaml");
+            for(int i=0; i < listView1.Items.Count; i++)
+            {
+                if (lastyaml.Equals(listView1.Items[i].SubItems[0].Text))
+                {
+                    listView1.Items[i].SubItems[3].Text = "🐱";
+                    
+                }
+            }
         }
         private void ConfigManager_Load(object sender, EventArgs e)
         {
@@ -120,7 +134,7 @@ namespace ClashN
             if (file != null)
             {
                 utils.CopyToFile(file, Application.StartupPath + @"/profiles");
-                MessageBox.Show("ADD SUCCESSFUL");
+                MessageBox.Show("添加成功");
             }
             
 
@@ -135,15 +149,12 @@ namespace ClashN
 
         private void 添加订阅ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.Close();
             new AddSub().Show();
         }
         //根据配置启动
         private void 启用配置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*            RestfulGo restfulGo = new RestfulGo();
-                        utils.KillProcess("clash");
-                        string clashStr = @"clash -d ./ -f ./profiles/" + listView1.SelectedItems[0].SubItems[0].Text + " -ext-ctl 127.0.0.1:9090 -ext-ui ui";
-                        utils.CmdLine(clashStr);*/
             RestfulGo restfulGo = new RestfulGo();
             string fileName = listView1.SelectedItems[0].SubItems[0].Text;
             string path = Application.StartupPath + @"/profiles/" + fileName;
@@ -156,14 +167,18 @@ namespace ClashN
             string yamlPath = Application.StartupPath + @"/config.yaml";
             YML yml = new YML(yamlPath);
             yml.modify("last-yaml", fileName);
-            yml.modify("last-yamlIndex", listView1.SelectedItems[0].Index.ToString());
+            //yml.modify("last-yamlIndex", listView1.SelectedItems[0].Index.ToString());
             yml.save();
-            //new ClashN().configChoose.SelectedIndex = listView1.SelectedItems[0].Index;
+            //new ClashN().configChoose
             for (int i = 0; i < listView1.Items.Count; i++)
             {
                 listView1.Items[i].SubItems[3].Text = " ";
             }
-            listView1.SelectedItems[0].SubItems[3].Text = "v";
+            listView1.SelectedItems[0].SubItems[3].Text = "🐱";
+            tscb.SelectedIndex = listView1.SelectedItems[0].Index;
+
+
+
 
         }
 
@@ -185,20 +200,8 @@ namespace ClashN
 
         private void btnOneClickUpdate_Click(object sender, EventArgs e)
         {
-           
-            for(int i = 0; i < listView1.Items.Count; i++)
-            {
-                string path = Application.StartupPath + @"/profiles/" + listView1.Items[i].SubItems[0].Text;
-                string url = listView1.Items[i].SubItems[2].Text;
-                if (url != "")
-                {
-                    utils.DownloadFile(listView1.Items[i].SubItems[2].Text, path);
-                    //将如下保存到每个订阅的配置文件中 
-                    //ClashNurl ： url
-                    string str = "clash-sub-url: " + url;
-                    utils.WriteFirstLine(path, str);
-                }
-            }
+            backgroundWorker2.RunWorkerAsync();
+
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -232,16 +235,48 @@ namespace ClashN
         {
             //System.Diagnostics.Process.Start("explorer.exe", "https://github.com/vveg26/SelfConfig");
             string filePath = Application.StartupPath + @"/config.ini"; //配置文件
-            List<string> urls = new List<string>();
-            urls = utils.ReadIniKeys("Clash", filePath);
+           
+            Dictionary<string, string> map= new Dictionary<string, string>();
+            map = utils.IniReadMap("Clash", filePath);
 
 
 
-            for (int i = 0; i < urls.Count; i++)
+            for (int i = 0; i < map.Count; i++)
             {
                 string downloadSavePath = Application.StartupPath + @"/profiles/free" + i + @".yaml";
-                utils.DownloadFile(urls[i], downloadSavePath);
+                var item = map.ElementAt(i);
+                utils.DownloadFile(item.Value, downloadSavePath);
+                //MessageBox.Show(item.Value);
             }
         }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                string path = Application.StartupPath + @"/profiles/" + listView1.Items[i].SubItems[0].Text;
+                string url = listView1.Items[i].SubItems[2].Text;
+                if (url != "")
+                {
+                    utils.DownloadFile(listView1.Items[i].SubItems[2].Text, path);
+                    //将如下保存到每个订阅的配置文件中 
+                    //ClashNurl ： url
+                    string str = "clash-sub-url: " + url;
+                    utils.WriteFirstLine(path, str);
+                }
+            }
+
+            ReloadListView();
+        }
+
+        private void 更新免费订阅源文件ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            YML yml = new YML(Application.StartupPath + @"/config.yaml");
+            string url = yml.read("configIni");
+
+            utils.DownloadFile(url, Application.StartupPath + @"/config.ini");
+        }
+
+
     }
 }

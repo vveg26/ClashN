@@ -17,7 +17,13 @@ namespace ClashN
         {
             InitializeComponent();
         }
+        public AddSub(ListView lsv)
+        {
+            this.lsv = lsv;
+            InitializeComponent();
+        }
 
+        ListView lsv = new ListView();
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string path = Application.StartupPath+@"/profiles/"+txtYamlName.Text+@".yaml";//配置文件保存路径
@@ -33,10 +39,18 @@ namespace ClashN
                 utils.WriteFirstLine(path, str);
             }
 
+
             
+           
+           
             
             
 
+
+        }
+
+        private void AddSub_Load(object sender, EventArgs e)
+        {
 
         }
     }

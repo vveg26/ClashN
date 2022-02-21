@@ -64,7 +64,6 @@
     <Compile Include="AddSub.Designer.cs">
       <DependentUpon>AddSub.cs</DependentUpon>
     </Compile>
-    <Compile Include="ClashRestful.cs" />
     <Compile Include="RestfulGo.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ConfigManager.cs">

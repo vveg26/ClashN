@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -169,7 +171,10 @@ namespace ClashN
 
         private void 订阅管理ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new ConfigManager().Show();
+            //new ConfigManager().Show();
+
+            new ConfigManager(configChoose).Show();
+
         }
 
         private void 订阅转换ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -222,18 +227,23 @@ namespace ClashN
 
 
         }
-        
-
-        private void ClashN_Load(object sender, EventArgs e)
+        //重载配置文件combobox
+        public void ReloadCombobox()
         {
-            YML yml = new YML(Application.StartupPath + @"/config.yaml");//YML
-
             //界面显示部分（Combobox）
             List<System.IO.FileInfo> files = new List<System.IO.FileInfo>();
             string path = @"./profiles";//配置文件文件夹
             GetFiles(path, ".yaml", ref files);//获取文件夹下的文件
             ListShow(files); //显示配置文件列表
-            
+        }
+
+        private void ClashN_Load(object sender, EventArgs e)
+        {
+            YML yml = new YML(Application.StartupPath + @"/config.yaml");//YML
+
+            ReloadCombobox();
+
+            开机自启ToolStripMenuItem.Checked = bool.Parse( yml.read("auto-run"));
 
 
             localUI = yml.read("localUI");
@@ -247,12 +257,22 @@ namespace ClashN
             string cmdStr = @"clash -d ./ -f ./profiles/"+yamlName +" -ext-ctl 127.0.0.1:9090 -ext-ui ui";
             utils.CmdLine(cmdStr);
             //TODO 需要改进删除之后异常的bug
-            int configindex = int.Parse(yml.read("last-yamlIndex"));
-            if (configChoose.Items.Count >= configindex)
+            /*            int configindex = int.Parse(yml.read("last-yamlIndex"));
+
+                        if (configChoose.Items.Count >= configindex)
+                        {
+                            configChoose.SelectedIndex = configindex;
+                        }*/
+
+            string configItem = yml.read("last-yaml");
+            for(int i=0; i < configChoose.Items.Count; i++)
             {
-                configChoose.SelectedIndex = configindex;
+                if (configChoose.Items[i].ToString().Equals(configItem))
+                {
+                    configChoose.SelectedIndex = i;
+                }
             }
-            
+           // MessageBox.Show(configChoose.Items[1].ToString());
             string configUrl = "http://127.0.0.1:9090/configs";
 
             port = yml.read("port");
@@ -270,7 +290,8 @@ namespace ClashN
             }
             mixedport = yml.read("mixed-port");
             string jsonConfigData = "{\"port\":"+port+",\"socks-port\":"+socksport+",\"mode\":\""+mode+"\",\"allow-lan\":"+allowlan+",\"log-level\":\""+loglevel+ "\",\"mixed-port\":" + mixedport + "}";//基础配置信息
-            //string jsonConfigData1 = "{\"port\":7890,\"socks-port\":7891,\"mode\":\"Rule\",\"allow-lan\":false,\"log-level\":\"info\"}";//基础配置信息
+            //string jsonConfigData = "{\"port\":7890,\"socks-port\":7891,\"mode\":\"Rule\",\"allow-lan\":false,\"log-level\":\"info\",\"mixed-port\": 7893}";//基础配置信息
+            
             string a = restfulGo.WebPatch(configUrl, jsonConfigData);
             //MessageBox.Show(a);
             //Console.WriteLine(jsonConfigData1);
@@ -305,16 +326,14 @@ namespace ClashN
 
         private void 开机自启ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("涉及到注册表修改，已移除");
         }
 
 
         //切换配置文件
         private void configChoose_SelectedIndexChanged(object sender, EventArgs e)
         {
-/*          utils.KillProcess("clash");
-            string clashStr = @"clash -d ./ -f ./profiles/" + configChoose.Text + " -ext-ctl 127.0.0.1:9090 -ext-ui ui";
-            utils.CmdLine(clashStr);*/
+
             //TODO需要优化
             string fileName = configChoose.Text;
             string path = Application.StartupPath+@"/profiles/" + fileName;
@@ -333,7 +352,7 @@ namespace ClashN
             string yamlPath = Application.StartupPath + @"/config.yaml";
             YML yml = new YML(yamlPath);
             yml.modify("last-yaml", fileName);
-            yml.modify("last-yamlIndex", configChoose.SelectedIndex.ToString());
+           // yml.modify("last-yamlIndex", configChoose.SelectedIndex.ToString());
             yml.save();
             
         }
@@ -376,5 +395,40 @@ namespace ClashN
         {
 
         }
+
+        private void configChoose_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string proxiesUrl = "http://127.0.0.1:9090/proxies";
+            string jsonData = restfulGo.WebGet(proxiesUrl);
+
+
+            //GLOBAL的操作
+            string jsonDataProxies = utils.JsonRead(jsonData ,"proxies");
+            string jsonDataGlobal = utils.JsonRead(jsonDataProxies, "GLOBAL");
+            string jsonDataAll = utils.JsonRead(jsonDataGlobal, "all"); //获取一个数组
+            MessageBox.Show(jsonDataAll);
+/*          Dictionary<string, string> map = new Dictionary<string, string>();
+            map = utils.JsonGetAllKV(jsonDataAll);
+            string message = string.Empty;
+            foreach (var item in map)
+
+            {
+
+                message += item.Key;
+
+            }
+            MessageBox.Show(message);*/
+
+
+
+
+        }
+
+
     }
 }
