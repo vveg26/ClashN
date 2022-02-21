@@ -155,27 +155,32 @@ namespace ClashN
         //根据配置启动
         private void 启用配置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RestfulGo restfulGo = new RestfulGo();
-            string fileName = listView1.SelectedItems[0].SubItems[0].Text;
-            string path = Application.StartupPath + @"/profiles/" + fileName;
-            string jsonReloadData = JsonConvert.SerializeObject(new
+            if(listView1.SelectedItems.Count > 0)
             {
-                path = path //配置文件路径
+                RestfulGo restfulGo = new RestfulGo();
+                string fileName = listView1.SelectedItems[0].SubItems[0].Text;
+                string path = Application.StartupPath + @"/profiles/" + fileName;
+                string jsonReloadData = JsonConvert.SerializeObject(new
+                {
+                    path = path //配置文件路径
 
-            });
-            string message = restfulGo.WebPut("http://127.0.0.1:9090/configs?force=false", jsonReloadData);//切换配置文件
-            string yamlPath = Application.StartupPath + @"/config.yaml";
-            YML yml = new YML(yamlPath);
-            yml.modify("last-yaml", fileName);
-            //yml.modify("last-yamlIndex", listView1.SelectedItems[0].Index.ToString());
-            yml.save();
-            //new ClashN().configChoose
-            for (int i = 0; i < listView1.Items.Count; i++)
-            {
-                listView1.Items[i].SubItems[3].Text = " ";
+                });
+                string message = restfulGo.WebPut("http://127.0.0.1:9090/configs?force=false", jsonReloadData);//切换配置文件
+                string yamlPath = Application.StartupPath + @"/config.yaml";
+                YML yml = new YML(yamlPath);
+                yml.modify("last-yaml", fileName);
+                //yml.modify("last-yamlIndex", listView1.SelectedItems[0].Index.ToString());
+                yml.save();
+                //new ClashN().configChoose
+                for (int i = 0; i < listView1.Items.Count; i++)
+                {
+                    listView1.Items[i].SubItems[3].Text = " ";
+                }
+                listView1.SelectedItems[0].SubItems[3].Text = "🐱";
+                //再次调用时 会导致读取两次文件yaml，会造成冲突，一次是listview，一次是combobox，取消掉listview的改变就可
+               //tscb.SelectedIndex = listView1.SelectedItems[0].Index;
+
             }
-            listView1.SelectedItems[0].SubItems[3].Text = "🐱";
-            tscb.SelectedIndex = listView1.SelectedItems[0].Index;
 
 
 
@@ -184,17 +189,19 @@ namespace ClashN
 
         private void 更新配置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string path = Application.StartupPath + @"/profiles/" + listView1.SelectedItems[0].SubItems[0].Text;
-            string url = listView1.SelectedItems[0].SubItems[2].Text;
-            if (url!="")
+            if (listView1.SelectedItems.Count > 0)
             {
-                utils.DownloadFile(listView1.SelectedItems[0].SubItems[2].Text, path);
-                //将如下保存到每个订阅的配置文件中 
-                //ClashNurl ： url
-                string str = "clash-sub-url: " + url;
-                utils.WriteFirstLine(path, str);
+                string path = Application.StartupPath + @"/profiles/" + listView1.SelectedItems[0].SubItems[0].Text;
+                string url = listView1.SelectedItems[0].SubItems[2].Text;
+                if (url != "")
+                {
+                    utils.DownloadFile(listView1.SelectedItems[0].SubItems[2].Text, path);
+                    //将如下保存到每个订阅的配置文件中 
+                    //ClashNurl ： url
+                    string str = "clash-sub-url: " + url;
+                    utils.WriteFirstLine(path, str);
+                }
             }
-
             
         }
 
@@ -217,17 +224,19 @@ namespace ClashN
 
         private void 删除配置文件ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            string path1 = Application.StartupPath + @"/profiles/"+listView1.SelectedItems[0].SubItems[0].Text;
-            // ...or by using FileInfo instance method.
-            System.IO.FileInfo fi = new System.IO.FileInfo(path1);
-            try
+            if (listView1.SelectedItems.Count > 0)
             {
-                fi.Delete();
-            }
-            catch (System.IO.IOException ex)
-            {
-                Console.WriteLine(ex.Message);
+                string path1 = Application.StartupPath + @"/profiles/" + listView1.SelectedItems[0].SubItems[0].Text;
+                // ...or by using FileInfo instance method.
+                System.IO.FileInfo fi = new System.IO.FileInfo(path1);
+                try
+                {
+                    fi.Delete();
+                }
+                catch (System.IO.IOException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
