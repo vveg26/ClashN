@@ -50,8 +50,8 @@ namespace ClashN
             this.订阅转换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trayExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.节点选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.button1 = new System.Windows.Forms.Button();
             this.menuRight.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.SuspendLayout();
@@ -83,6 +83,7 @@ namespace ClashN
             this.trayIco.Icon = ((System.Drawing.Icon)(resources.GetObject("trayIco.Icon")));
             this.trayIco.Text = "clashN";
             this.trayIco.Visible = true;
+            this.trayIco.Click += new System.EventHandler(this.trayIco_Click);
             this.trayIco.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trayico_MouseDoubleClick);
             // 
             // trayMenu
@@ -98,9 +99,10 @@ namespace ClashN
             this.sp2,
             this.其他设置ToolStripMenuItem,
             this.trayExit,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.节点选择ToolStripMenuItem});
             this.trayMenu.Name = "contextMenuStrip1";
-            this.trayMenu.Size = new System.Drawing.Size(182, 190);
+            this.trayMenu.Size = new System.Drawing.Size(182, 212);
             this.trayMenu.Text = "trayIcoMenu";
             // 
             // 系统代理ToolStripMenuItem
@@ -137,7 +139,6 @@ namespace ClashN
             this.rulecbx.Name = "rulecbx";
             this.rulecbx.Size = new System.Drawing.Size(121, 25);
             this.rulecbx.SelectedIndexChanged += new System.EventHandler(this.rulecbx_SelectedIndexChanged);
-            this.rulecbx.Click += new System.EventHandler(this.rulecbx_Click);
             // 
             // 控制面板ToolStripMenuItem
             // 
@@ -163,7 +164,6 @@ namespace ClashN
             this.configChoose.Name = "configChoose";
             this.configChoose.Size = new System.Drawing.Size(121, 25);
             this.configChoose.SelectedIndexChanged += new System.EventHandler(this.configChoose_SelectedIndexChanged);
-            this.configChoose.Click += new System.EventHandler(this.configChoose_Click);
             // 
             // sp2
             // 
@@ -207,6 +207,12 @@ namespace ClashN
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
             // 
+            // 节点选择ToolStripMenuItem
+            // 
+            this.节点选择ToolStripMenuItem.Name = "节点选择ToolStripMenuItem";
+            this.节点选择ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.节点选择ToolStripMenuItem.Text = "节点选择";
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -215,22 +221,11 @@ namespace ClashN
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(101, 92);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(201, 112);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // ClashN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 251);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -267,7 +262,7 @@ namespace ClashN
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripComboBox rulecbx;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem 节点选择ToolStripMenuItem;
     }
 }
 

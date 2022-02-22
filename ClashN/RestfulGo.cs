@@ -9,6 +9,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ClashN
 {
@@ -69,27 +70,33 @@ namespace ClashN
             writer.Write(payload, 0, payload.Length);
             writer.Close();//关闭请求流
                            // String strValue = "";//strValue为http响应所返回的字符流
-            /*           HttpWebResponse response;
-                       try
-                       {
-                           //获得响应流
-                           response = (HttpWebResponse)request.GetResponse();
-                       }
-                       catch (WebException ex)
-                       {
-                           response = ex.Response as HttpWebResponse;
-                       }
-                       Stream s = response.GetResponseStream();
-                       //  Stream postData = Request.InputStream;
-                       StreamReader sRead = new StreamReader(s);
-                       string postContent = sRead.ReadToEnd();
-                       sRead.Close();
-                       s.Close();
+            string postContent = null;
+            //如果出现异常，可以将下面的部分注释掉--------------------------------------------------------------------
 
 
-                       response.Close();*/
-            //return postContent;//返回Json数据
-            return "111";
+
+            try
+            {
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    Stream s = response.GetResponseStream();
+                    StreamReader sRead = new StreamReader(s);
+                    postContent = sRead.ReadToEnd();
+                    sRead.Close();
+                    s.Close();
+                    response.Close();
+                }
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------           
+           return postContent;//返回Json数据
+           
 
         }
 

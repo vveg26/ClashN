@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace ClashN
@@ -239,6 +240,7 @@ namespace ClashN
 
         private void ClashN_Load(object sender, EventArgs e)
         {
+           
             YML yml = new YML(Application.StartupPath + @"/config.yaml");//YML
 
             ReloadCombobox();
@@ -263,7 +265,7 @@ namespace ClashN
                         {
                             configChoose.SelectedIndex = configindex;
                         }*/
-
+            ReloadNodeChoose();//初始化节点
             string configItem = yml.read("last-yaml");
             for(int i=0; i < configChoose.Items.Count; i++)
             {
@@ -391,44 +393,88 @@ namespace ClashN
             
         }
 
-        private void rulecbx_Click(object sender, EventArgs e)
-        {
 
+
+        /// <summary>
+        /// 菜单栏点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DemoClick(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripMenuItem item1 = (ToolStripMenuItem)item.OwnerItem;
+            for(int i = 0; i < item1.DropDownItems.Count; i++)
+            {
+                ToolStripMenuItem item3 = (ToolStripMenuItem)item1.DropDownItems[i];
+                item3.Checked = false;
+            }
+            string url = "http://127.0.0.1:9090/proxies/";
+
+            string selector = item1.Text;
+
+            string url1 = url + selector;
+            string jsonData = "{\"name\":\"" + item.Text + "\"}";
+            string a = restfulGo.WebPut(url1,jsonData);
+            item.Checked = true;
         }
-
-        private void configChoose_Click(object sender, EventArgs e)
+        //获取节点信息，并初始化界面
+        public void ReloadNodeChoose()
         {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
+            节点选择ToolStripMenuItem.DropDownItems.Clear();
+            //获取Key
             string proxiesUrl = "http://127.0.0.1:9090/proxies";
             string jsonData = restfulGo.WebGet(proxiesUrl);
+            string jsontest = utils.JsonRead(jsonData, "proxies");
+            Dictionary<string, string> map = new Dictionary<string, string>();
+            map = utils.JsonGetAllKV(jsontest);
 
-
-            //GLOBAL的操作
-            string jsonDataProxies = utils.JsonRead(jsonData ,"proxies");
-            string jsonDataGlobal = utils.JsonRead(jsonDataProxies, "GLOBAL");
-            string jsonDataAll = utils.JsonRead(jsonDataGlobal, "all"); //获取一个数组
-            MessageBox.Show(jsonDataAll);
-/*          Dictionary<string, string> map = new Dictionary<string, string>();
-            map = utils.JsonGetAllKV(jsonDataAll);
-            string message = string.Empty;
-            foreach (var item in map)
+            foreach (var x in map)
 
             {
 
-                message += item.Key;
+
+                ToolStripMenuItem item = new ToolStripMenuItem();
+                string str = x.Key;
+
+                string str1 = x.Value;
+                JArray jarray = (JArray)utils.JsonReadAll(str1, "all");//全部节点
+                string now = utils.JsonRead(str1, "now");//当前选择节点
+                if (jarray != null)
+                {
+                    foreach (string node in jarray)
+                    {   
+                        ToolStripMenuItem secondItem = new ToolStripMenuItem(node);
+                        secondItem.Text = node;
+                        secondItem.Click += DemoClick;
+                        if(secondItem .Text.Equals(now))
+                        {
+                            secondItem.Checked = true;
+                        }
+
+                        item.DropDownItems.Add(secondItem);
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+                
+
+                item.Text = str;
+                item.Name = str;
+                节点选择ToolStripMenuItem.DropDownItems.Add(item);
 
             }
-            MessageBox.Show(message);*/
-
-
-
-
         }
 
 
+
+        private void trayIco_Click(object sender, EventArgs e)
+        {
+            ReloadNodeChoose();//重载节点选择
+            ReloadCombobox();//重载规则
+            
+        }
     }
 }
