@@ -165,16 +165,13 @@ namespace ClashN
             yml.save();
         }
 
-        private void 本地UIToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start(localUI);
-        }
+
 
         private void 订阅管理ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //new ConfigManager().Show();
 
-            new ConfigManager(configChoose).Show();
+            new ConfigManager(this).Show();
 
         }
 
@@ -238,43 +235,35 @@ namespace ClashN
             ListShow(files); //显示配置文件列表
         }
 
-        private void ClashN_Load(object sender, EventArgs e)
+        public void InitUI()
         {
-           
             YML yml = new YML(Application.StartupPath + @"/config.yaml");//YML
 
             ReloadCombobox();
 
-            开机自启ToolStripMenuItem.Checked = bool.Parse( yml.read("auto-run"));
-
-
+            开机自启ToolStripMenuItem.Checked = bool.Parse(yml.read("auto-run"));
             localUI = yml.read("localUI");
-            subConvert =yml.read("subConvert");
+            subConvert = yml.read("subConvert");
 
             utils.KillProcess("clash");
-        
+
             string yamlName = yml.read("last-yaml");
-           
-           
-            string cmdStr = @"clash -d ./ -f ./profiles/"+yamlName +" -ext-ctl 127.0.0.1:9090 -ext-ui ui";
+
+
+            string cmdStr = @"clash -d ./ -f ./profiles/" + yamlName + " -ext-ctl 127.0.0.1:9090 -ext-ui ui";
             utils.CmdLine(cmdStr);
             //TODO 需要改进删除之后异常的bug
-            /*            int configindex = int.Parse(yml.read("last-yamlIndex"));
 
-                        if (configChoose.Items.Count >= configindex)
-                        {
-                            configChoose.SelectedIndex = configindex;
-                        }*/
             ReloadNodeChoose();//初始化节点
             string configItem = yml.read("last-yaml");
-            for(int i=0; i < configChoose.Items.Count; i++)
+            for (int i = 0; i < configChoose.Items.Count; i++)
             {
                 if (configChoose.Items[i].ToString().Equals(configItem))
                 {
                     configChoose.SelectedIndex = i;
                 }
             }
-           // MessageBox.Show(configChoose.Items[1].ToString());
+            // MessageBox.Show(configChoose.Items[1].ToString());
             string configUrl = "http://127.0.0.1:9090/configs";
 
             port = yml.read("port");
@@ -291,13 +280,11 @@ namespace ClashN
                 allowlan = "false";
             }
             mixedport = yml.read("mixed-port");
-            string jsonConfigData = "{\"port\":"+port+",\"socks-port\":"+socksport+",\"mode\":\""+mode+"\",\"allow-lan\":"+allowlan+",\"log-level\":\""+loglevel+ "\",\"mixed-port\":" + mixedport + "}";//基础配置信息
-            //string jsonConfigData = "{\"port\":7890,\"socks-port\":7891,\"mode\":\"Rule\",\"allow-lan\":false,\"log-level\":\"info\",\"mixed-port\": 7893}";//基础配置信息
-            
+            string jsonConfigData = "{\"port\":" + port + ",\"socks-port\":" + socksport + ",\"mode\":\"" + mode + "\",\"allow-lan\":" + allowlan + ",\"log-level\":\"" + loglevel + "\",\"mixed-port\":" + mixedport + "}";//基础配置信息
+            //string jsonConfigData = "{\"port\":7890,\"socks-port\":7891,\"mode\":\"Rule\",\"allow-lan\":false,\"log-level\":\"info\",\"mixed-port\": 7893}";//基础配置信息          
             string a = restfulGo.WebPatch(configUrl, jsonConfigData);
-            //MessageBox.Show(a);
-            //Console.WriteLine(jsonConfigData1);
-            bool systemproxy = bool.Parse( yml.read("system-proxy"));
+
+            bool systemproxy = bool.Parse(yml.read("system-proxy"));
             if (systemproxy)
             {
                 设置系统代理ToolStripMenuItem.PerformClick();
@@ -310,7 +297,8 @@ namespace ClashN
             if (mode.Equals("rule"))
             {
                 rulecbx.SelectedIndex = 1;
-            }else if (mode.Equals("global"))
+            }
+            else if (mode.Equals("global"))
             {
                 rulecbx.SelectedIndex = 0;
             }
@@ -322,6 +310,11 @@ namespace ClashN
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
             SetVisibleCore(false);
+        }
+        private void ClashN_Load(object sender, EventArgs e)
+        {
+
+            InitUI();
 
 
         }
@@ -468,13 +461,16 @@ namespace ClashN
             }
         }
 
-
-
-        private void trayIco_Click(object sender, EventArgs e)
+        public void ReloadAll()
         {
             ReloadNodeChoose();//重载节点选择
             ReloadCombobox();//重载规则
             //FIX BUGS
+        }
+
+        private void trayIco_Click(object sender, EventArgs e)
+        {
+           // ReloadAll();
 
             
         }

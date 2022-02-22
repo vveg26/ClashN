@@ -326,6 +326,43 @@ namespace ClashN
             return true;
         }
 
+        /// <summary>
+        /// 获得目录下所有文件或指定文件类型文件(包含所有子文件夹)
+        /// </summary>
+        /// <param name="path">文件夹路径</param>
+        /// <param name="extName">扩展名可以多个 例如 .mp3.wma.rm</param>
+        /// <returns>List<FileInfo></returns>
+        public List<System.IO.FileInfo> GetFiles(string path, string ExtName)
+        {
+
+            try
+            {
+                List<FileInfo> lst = new List<FileInfo>();
+                string[] dir = System.IO.Directory.GetDirectories(path);// 文件夹列表
+                System.IO.DirectoryInfo directoryInfo = new System.IO.DirectoryInfo(path);
+                System.IO.FileInfo[] files = directoryInfo.GetFiles();
+                if (files.Length != 0 || dir.Length != 0) // 当前目录文件或文件夹不能为空
+                {
+                    foreach (System.IO.FileInfo f in files)
+                    {
+                        if (ExtName.ToLower().IndexOf(f.Extension.ToLower()) >= 0)
+                        {
+                            lst.Add(f);
+                        }
+                    }
+                    foreach (string d in dir)
+                    {
+                        GetFiles(d, ExtName);
+                    }
+                }
+                return lst;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
 
     }
 }

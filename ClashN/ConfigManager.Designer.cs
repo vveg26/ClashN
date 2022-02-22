@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewConfigFile = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -42,35 +42,37 @@
             this.添加配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.手动添加ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.添加订阅ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.更新免费订阅源文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnOneClickUpdate = new System.Windows.Forms.Button();
             this.btnOpenDir = new System.Windows.Forms.Button();
             this.btnGetFree = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.更新免费订阅源文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backgroundWorkerGetFree = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerOneClickUpdate = new System.ComponentModel.BackgroundWorker();
             this.configMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listView1
+            // listViewConfigFile
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewConfigFile.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.listView1.ContextMenuStrip = this.configMenu;
-            this.listView1.FullRowSelect = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(20, 20);
-            this.listView1.Margin = new System.Windows.Forms.Padding(2);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(818, 157);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
+            this.listViewConfigFile.ContextMenuStrip = this.configMenu;
+            this.listViewConfigFile.FullRowSelect = true;
+            this.listViewConfigFile.HideSelection = false;
+            this.listViewConfigFile.Location = new System.Drawing.Point(20, 20);
+            this.listViewConfigFile.Margin = new System.Windows.Forms.Padding(2);
+            this.listViewConfigFile.MultiSelect = false;
+            this.listViewConfigFile.Name = "listViewConfigFile";
+            this.listViewConfigFile.Size = new System.Drawing.Size(818, 157);
+            this.listViewConfigFile.TabIndex = 0;
+            this.listViewConfigFile.UseCompatibleStateImageBehavior = false;
+            this.listViewConfigFile.View = System.Windows.Forms.View.Details;
+            this.listViewConfigFile.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.listViewConfigFile.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             // 
             // columnHeader1
             // 
@@ -103,7 +105,7 @@
             this.添加配置ToolStripMenuItem,
             this.更新免费订阅源文件ToolStripMenuItem});
             this.configMenu.Name = "configMenu";
-            this.configMenu.Size = new System.Drawing.Size(185, 142);
+            this.configMenu.Size = new System.Drawing.Size(185, 120);
             // 
             // 启用配置ToolStripMenuItem
             // 
@@ -154,6 +156,13 @@
             this.添加订阅ToolStripMenuItem.Text = "添加订阅";
             this.添加订阅ToolStripMenuItem.Click += new System.EventHandler(this.添加订阅ToolStripMenuItem_Click);
             // 
+            // 更新免费订阅源文件ToolStripMenuItem
+            // 
+            this.更新免费订阅源文件ToolStripMenuItem.Name = "更新免费订阅源文件ToolStripMenuItem";
+            this.更新免费订阅源文件ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.更新免费订阅源文件ToolStripMenuItem.Text = "更新免费订阅源文件";
+            this.更新免费订阅源文件ToolStripMenuItem.Click += new System.EventHandler(this.更新免费订阅源文件ToolStripMenuItem_Click);
+            // 
             // btnOneClickUpdate
             // 
             this.btnOneClickUpdate.Location = new System.Drawing.Point(20, 195);
@@ -186,21 +195,15 @@
             this.btnGetFree.Text = "获取免费订阅";
             this.btnGetFree.UseVisualStyleBackColor = true;
             this.btnGetFree.Click += new System.EventHandler(this.btnGetFree_Click);
+
             // 
-            // backgroundWorker1
+            // backgroundWorkerGetFree
             // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorkerGetFree.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerGetFree_DoWork);
             // 
-            // backgroundWorker2
+            // backgroundWorkerOneClickUpdate
             // 
-            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
-            // 
-            // 更新免费订阅源文件ToolStripMenuItem
-            // 
-            this.更新免费订阅源文件ToolStripMenuItem.Name = "更新免费订阅源文件ToolStripMenuItem";
-            this.更新免费订阅源文件ToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.更新免费订阅源文件ToolStripMenuItem.Text = "更新免费订阅源文件";
-            this.更新免费订阅源文件ToolStripMenuItem.Click += new System.EventHandler(this.更新免费订阅源文件ToolStripMenuItem_Click);
+            this.backgroundWorkerOneClickUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerOneClickUpdate_DoWork);
             // 
             // ConfigManager
             // 
@@ -211,7 +214,7 @@
             this.Controls.Add(this.btnGetFree);
             this.Controls.Add(this.btnOpenDir);
             this.Controls.Add(this.btnOneClickUpdate);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listViewConfigFile);
             this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ConfigManager";
@@ -224,7 +227,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listViewConfigFile;
         private System.Windows.Forms.Button btnOneClickUpdate;
         private System.Windows.Forms.Button btnOpenDir;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -243,5 +246,7 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.ToolStripMenuItem 更新免费订阅源文件ToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerGetFree;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerOneClickUpdate;
     }
 }
