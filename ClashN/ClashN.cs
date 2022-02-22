@@ -474,6 +474,8 @@ namespace ClashN
         {
             ReloadNodeChoose();//重载节点选择
             ReloadCombobox();//重载规则
+            //FIX BUGS
+
             
         }
     }
