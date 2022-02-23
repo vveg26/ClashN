@@ -1,0 +1,14 @@
+port: 18868
+socks-port: 18869
+mixed-port: 18867
+allow-lan: False
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+last-yaml: free0.yaml
+system-proxy: false
+auto-run: false
+subConvert: https://sub.v1.mk/
+localUI: http://127.0.0.1:9090/ui/
+configIni: https://raw.githubusercontent.com/vveg26/SelfConfig/main/config.ini
+clash-core: 

@@ -43,3 +43,7 @@ C:\Users\VEG26\Dropbox\仓库\ClashNC\ClashN\bin\Debug\Newtonsoft.Json.dll
 C:\Users\VEG26\Dropbox\仓库\ClashNC\ClashN\bin\Debug\Newtonsoft.Json.xml
 C:\Users\JXCW_3D\Dropbox\仓库\ClashNC\ClashN\bin\Debug\Newtonsoft.Json.dll
 C:\Users\JXCW_3D\Dropbox\仓库\ClashNC\ClashN\bin\Debug\Newtonsoft.Json.xml
+C:\Users\JXCW_3D\Dropbox\仓库\ClashNC\ClashN\bin\Debug\ClashN.exe.manifest
+C:\Users\JXCW_3D\Dropbox\仓库\ClashNC\ClashN\bin\Debug\ClashN.application
+C:\Users\JXCW_3D\Dropbox\仓库\ClashNC\ClashN\obj\Debug\ClashN.exe.manifest
+C:\Users\JXCW_3D\Dropbox\仓库\ClashNC\ClashN\obj\Debug\ClashN.application
