@@ -41,17 +41,17 @@ namespace ClashN
             this.清除系统代理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rulecbx = new System.Windows.Forms.ToolStripComboBox();
             this.控制面板ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.节点选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sp1 = new System.Windows.Forms.ToolStripSeparator();
             this.订阅管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.添加订阅ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configChoose = new System.Windows.Forms.ToolStripComboBox();
             this.sp2 = new System.Windows.Forms.ToolStripSeparator();
             this.其他设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.开机自启ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.订阅转换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.版本更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trayExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.节点选择ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.backgroundWorkerClashCore = new System.ComponentModel.BackgroundWorker();
             this.menuRight.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.SuspendLayout();
@@ -88,21 +88,21 @@ namespace ClashN
             // 
             // trayMenu
             // 
+            this.trayMenu.DropShadowEnabled = false;
             this.trayMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.系统代理ToolStripMenuItem,
             this.rulecbx,
             this.控制面板ToolStripMenuItem,
+            this.节点选择ToolStripMenuItem,
             this.sp1,
             this.订阅管理ToolStripMenuItem,
             this.configChoose,
             this.sp2,
             this.其他设置ToolStripMenuItem,
-            this.trayExit,
-            this.toolStripSeparator1,
-            this.节点选择ToolStripMenuItem});
+            this.trayExit});
             this.trayMenu.Name = "contextMenuStrip1";
-            this.trayMenu.Size = new System.Drawing.Size(182, 212);
+            this.trayMenu.Size = new System.Drawing.Size(182, 228);
             this.trayMenu.Text = "trayIcoMenu";
             // 
             // 系统代理ToolStripMenuItem
@@ -132,6 +132,7 @@ namespace ClashN
             // 
             // rulecbx
             // 
+            this.rulecbx.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.rulecbx.Items.AddRange(new object[] {
             "全局",
             "规则",
@@ -147,6 +148,13 @@ namespace ClashN
             this.控制面板ToolStripMenuItem.Text = "控制面板";
             this.控制面板ToolStripMenuItem.Click += new System.EventHandler(this.控制面板ToolStripMenuItem_Click);
             // 
+            // 节点选择ToolStripMenuItem
+            // 
+            this.节点选择ToolStripMenuItem.Name = "节点选择ToolStripMenuItem";
+            this.节点选择ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.节点选择ToolStripMenuItem.Text = "节点选择";
+            this.节点选择ToolStripMenuItem.MouseEnter += new System.EventHandler(this.节点选择ToolStripMenuItem_MouseEnter);
+            // 
             // sp1
             // 
             this.sp1.Name = "sp1";
@@ -154,13 +162,23 @@ namespace ClashN
             // 
             // 订阅管理ToolStripMenuItem
             // 
+            this.订阅管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.添加订阅ToolStripMenuItem});
             this.订阅管理ToolStripMenuItem.Name = "订阅管理ToolStripMenuItem";
             this.订阅管理ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.订阅管理ToolStripMenuItem.Text = "订阅管理";
             this.订阅管理ToolStripMenuItem.Click += new System.EventHandler(this.订阅管理ToolStripMenuItem_Click);
             // 
+            // 添加订阅ToolStripMenuItem
+            // 
+            this.添加订阅ToolStripMenuItem.Name = "添加订阅ToolStripMenuItem";
+            this.添加订阅ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.添加订阅ToolStripMenuItem.Text = "添加订阅";
+            this.添加订阅ToolStripMenuItem.Click += new System.EventHandler(this.添加订阅ToolStripMenuItem_Click);
+            // 
             // configChoose
             // 
+            this.configChoose.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.configChoose.Name = "configChoose";
             this.configChoose.Size = new System.Drawing.Size(121, 25);
             this.configChoose.SelectedIndexChanged += new System.EventHandler(this.configChoose_SelectedIndexChanged);
@@ -173,27 +191,25 @@ namespace ClashN
             // 其他设置ToolStripMenuItem
             // 
             this.其他设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.开机自启ToolStripMenuItem,
-            this.订阅转换ToolStripMenuItem});
+            this.订阅转换ToolStripMenuItem,
+            this.版本更新ToolStripMenuItem});
             this.其他设置ToolStripMenuItem.Name = "其他设置ToolStripMenuItem";
             this.其他设置ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.其他设置ToolStripMenuItem.Text = "其他设置";
             // 
-            // 开机自启ToolStripMenuItem
-            // 
-            this.开机自启ToolStripMenuItem.Checked = true;
-            this.开机自启ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.开机自启ToolStripMenuItem.Name = "开机自启ToolStripMenuItem";
-            this.开机自启ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-            this.开机自启ToolStripMenuItem.Text = "开机自启";
-            this.开机自启ToolStripMenuItem.Click += new System.EventHandler(this.开机自启ToolStripMenuItem_Click);
-            // 
             // 订阅转换ToolStripMenuItem
             // 
             this.订阅转换ToolStripMenuItem.Name = "订阅转换ToolStripMenuItem";
-            this.订阅转换ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.订阅转换ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.订阅转换ToolStripMenuItem.Text = "订阅转换";
             this.订阅转换ToolStripMenuItem.Click += new System.EventHandler(this.订阅转换ToolStripMenuItem_Click);
+            // 
+            // 版本更新ToolStripMenuItem
+            // 
+            this.版本更新ToolStripMenuItem.Name = "版本更新ToolStripMenuItem";
+            this.版本更新ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.版本更新ToolStripMenuItem.Text = "版本更新";
+            this.版本更新ToolStripMenuItem.Click += new System.EventHandler(this.版本更新ToolStripMenuItem_Click);
             // 
             // trayExit
             // 
@@ -202,42 +218,25 @@ namespace ClashN
             this.trayExit.Text = "退出";
             this.trayExit.Click += new System.EventHandler(this.trayExit_Click);
             // 
-            // toolStripSeparator1
+            // backgroundWorkerClashCore
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(178, 6);
-            // 
-            // 节点选择ToolStripMenuItem
-            // 
-            this.节点选择ToolStripMenuItem.Name = "节点选择ToolStripMenuItem";
-            this.节点选择ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.节点选择ToolStripMenuItem.Text = "节点选择";
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(332, 24);
-            this.menuStrip1.TabIndex = 2;
-            this.menuStrip1.Text = "menuStrip1";
+            this.backgroundWorkerClashCore.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerClashCore_DoWork);
             // 
             // ClashN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(332, 211);
-            this.Controls.Add(this.menuStrip1);
+            this.ClientSize = new System.Drawing.Size(256, 138);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "ClashN";
             this.Text = "ClashN";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClashN_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ClashN_FormClosed);
             this.Load += new System.EventHandler(this.ClashN_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ClashN_MouseClick);
             this.menuRight.ResumeLayout(false);
             this.trayMenu.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -248,7 +247,6 @@ namespace ClashN
         private System.Windows.Forms.NotifyIcon trayIco;
         private System.Windows.Forms.ContextMenuStrip trayMenu;
         private System.Windows.Forms.ToolStripMenuItem trayExit;
-        private System.Windows.Forms.ToolStripMenuItem 订阅管理ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 系统代理ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 设置系统代理ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 控制面板ToolStripMenuItem;
@@ -256,13 +254,14 @@ namespace ClashN
         private System.Windows.Forms.ToolStripSeparator sp1;
         private System.Windows.Forms.ToolStripSeparator sp2;
         private System.Windows.Forms.ToolStripMenuItem 其他设置ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 开机自启ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 订阅转换ToolStripMenuItem;
         public System.Windows.Forms.ToolStripComboBox configChoose;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripComboBox rulecbx;
-        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 节点选择ToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerClashCore;
+        private System.Windows.Forms.ToolStripMenuItem 版本更新ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 订阅管理ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 添加订阅ToolStripMenuItem;
     }
 }
 

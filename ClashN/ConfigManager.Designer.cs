@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigManager));
             this.listViewConfigFile = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,8 +47,6 @@
             this.btnOneClickUpdate = new System.Windows.Forms.Button();
             this.btnOpenDir = new System.Windows.Forms.Button();
             this.btnGetFree = new System.Windows.Forms.Button();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerGetFree = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerOneClickUpdate = new System.ComponentModel.BackgroundWorker();
             this.configMenu.SuspendLayout();
@@ -71,7 +70,6 @@
             this.listViewConfigFile.TabIndex = 0;
             this.listViewConfigFile.UseCompatibleStateImageBehavior = false;
             this.listViewConfigFile.View = System.Windows.Forms.View.Details;
-            this.listViewConfigFile.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             this.listViewConfigFile.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             // 
             // columnHeader1
@@ -195,7 +193,6 @@
             this.btnGetFree.Text = "获取免费订阅";
             this.btnGetFree.UseVisualStyleBackColor = true;
             this.btnGetFree.Click += new System.EventHandler(this.btnGetFree_Click);
-
             // 
             // backgroundWorkerGetFree
             // 
@@ -216,6 +213,7 @@
             this.Controls.Add(this.btnOneClickUpdate);
             this.Controls.Add(this.listViewConfigFile);
             this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ConfigManager";
             this.Text = "配置文件管理";
@@ -228,7 +226,6 @@
         #endregion
 
         private System.Windows.Forms.ListView listViewConfigFile;
-        private System.Windows.Forms.Button btnOneClickUpdate;
         private System.Windows.Forms.Button btnOpenDir;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -243,10 +240,9 @@
         private System.Windows.Forms.ToolStripMenuItem 添加配置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 手动添加ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 添加订阅ToolStripMenuItem;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker2;
         private System.Windows.Forms.ToolStripMenuItem 更新免费订阅源文件ToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorkerGetFree;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerOneClickUpdate;
+        public System.ComponentModel.BackgroundWorker backgroundWorkerOneClickUpdate;
+        public System.Windows.Forms.Button btnOneClickUpdate;
     }
 }

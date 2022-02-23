@@ -103,7 +103,8 @@ namespace ClashN
                 MessageBox.Show("添加成功");
             }
             ReloadListView();
-            clashN.ReloadAll();
+            // clashN.ReloadAll();
+            clashN.ReloadCombobox();
 
         }
 
@@ -127,7 +128,7 @@ namespace ClashN
             {
                 RestfulGo restfulGo = new RestfulGo();
                 string fileName = listViewConfigFile.SelectedItems[0].SubItems[0].Text;
-                string path = Application.StartupPath + @"/profiles/" + fileName;
+                string path = profilesDir  + fileName;
                 string jsonReloadData = JsonConvert.SerializeObject(new
                 {
                     path = path //配置文件路径
@@ -147,7 +148,8 @@ namespace ClashN
                 listViewConfigFile.SelectedItems[0].SubItems[3].Text = "🐱";
                 //再次调用时 会导致读取两次文件yaml，会造成冲突，一次是listview，一次是combobox，取消掉listview的改变就可
                 // clashN.ReloadAll();
-                clashN.ReloadAll();
+                //clashN.ReloadAll();
+                clashN.ReloadCombobox();
                clashN.configChoose.SelectedIndex = listViewConfigFile.SelectedItems[0].Index;
 
             }
@@ -181,10 +183,6 @@ namespace ClashN
 
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
         //打开文件夹
         private void btnOpenDir_Click(object sender, EventArgs e)
         {
@@ -202,15 +200,27 @@ namespace ClashN
                 try
                 {
                     fi.Delete();
+                    listViewConfigFile.SelectedItems[0].Remove(); //删除一行
+
+                    if (listViewConfigFile.Items.Count  == 0)
+                    {   
+                        YML yml = new YML(yamlConfigPath);
+                        yml.modify("last-yaml", "config.yaml");
+                        yml.save();
+                    }
+
                 }
                 catch (System.IO.IOException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
+                
+
             }
-            listViewConfigFile.SelectedItems[0].Remove(); //删除一行
-            clashN.ReloadAll();
-            //ReloadListView();
+
+            //clashN.ReloadAll();
+            clashN.ReloadCombobox();
+           // clashN.configChoose.SelectedIndex = listViewConfigFile.SelectedItems[0].Index;
         }
 
 
@@ -243,10 +253,13 @@ namespace ClashN
 
                 }
             }
-
+            ReloadListView ();
+            clashN.ReloadCombobox();
+            
+           // clashN.configChoose.SelectedIndex = listViewConfigFile.SelectedItems[0].Index;
         }
         //后台一键更新
-        private void backgroundWorkerOneClickUpdate_DoWork(object sender, DoWorkEventArgs e)
+        public void backgroundWorkerOneClickUpdate_DoWork(object sender, DoWorkEventArgs e)
         {
             for (int i = 0; i < listViewConfigFile.Items.Count; i++)
             {

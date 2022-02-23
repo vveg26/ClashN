@@ -30,6 +30,7 @@ namespace ClashN
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddSub));
             this.txtYamlName = new System.Windows.Forms.TextBox();
             this.txtSubUrl = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -96,6 +97,7 @@ namespace ClashN
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSubUrl);
             this.Controls.Add(this.txtYamlName);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AddSub";
             this.Text = "添加配置";
             this.Load += new System.EventHandler(this.AddSub_Load);

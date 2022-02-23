@@ -17,13 +17,13 @@ namespace ClashN
         {
             InitializeComponent();
         }
-        public AddSub(ListView lsv)
+        public AddSub(ConfigManager configManager)
         {
-            this.lsv = lsv;
+            this.configManager  = configManager ;
             InitializeComponent();
         }
 
-        ListView lsv = new ListView();
+        ConfigManager configManager;
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string path = Application.StartupPath+@"/profiles/"+txtYamlName.Text+@".yaml";//配置文件保存路径
@@ -37,6 +37,7 @@ namespace ClashN
                 string str = "clash-sub-url: " + url;
                 //utils.WriteLine(str, path);
                 utils.WriteFirstLine(path, str);
+               // configManager.ReloadListView();
             }
 
 

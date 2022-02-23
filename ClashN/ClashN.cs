@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
@@ -17,10 +18,10 @@ namespace ClashN
     public partial class ClashN : Form
     {
         Utils utils = new Utils();  //工具类
-        YML yml = new YML(Application.StartupPath + @"/config.yaml");//YML
+        
         RestfulGo restfulGo = new RestfulGo();
-
-
+        string yamlConfigPath = Application.StartupPath + @"/config.yaml";
+        string profilesDir = Application.StartupPath + @"/profiles/"; //配置文件文件夹路径
         string subConvert = string.Empty; //订阅转换网址
         string localUI = string.Empty; //本地UI
 
@@ -33,6 +34,7 @@ namespace ClashN
         public ClashN()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false; //方便新线访问空间
         }
 
 /// <summary>
@@ -111,14 +113,12 @@ namespace ClashN
                 MessageBox.Show(ex.Message);
             }
         }
+        //保存UI和配置信息
+        public void SaveAll()
+        {
+            string url = "http://127.0.0.1:9090/configs";
 
-        
-
-        private void trayExit_Click(object sender, EventArgs e)
-        { 
-           string url = "http://127.0.0.1:9090/configs";
-
-           string message =restfulGo.WebGet(url);
+            string message = restfulGo.WebGet(url);
             YML yml = new YML(Application.StartupPath + @"/config.yaml");
             port = utils.JsonRead(message, "port");
             socksport = utils.JsonRead(message, "socks-port");
@@ -126,15 +126,21 @@ namespace ClashN
             allowlan = utils.JsonRead(message, "allow-lan");
             loglevel = utils.JsonRead(message, "log-level");
             mixedport = utils.JsonRead(message, "mixed-port");
+
             yml.modify("port", port);
-            yml.modify("socks-port",socksport);
-            yml.modify("mode",mode);
+            yml.modify("socks-port", socksport);
+            yml.modify("mode", mode);
             yml.modify("allow-lan", allowlan);
-            yml.modify("log-level",loglevel);
-            yml.modify("mixed-port",mixedport);
-            
+            yml.modify("log-level", loglevel);
+            yml.modify("mixed-port", mixedport);
+
             yml.save();
 
+        }
+
+        private void trayExit_Click(object sender, EventArgs e)
+        {
+            SaveAll();
             DialogResult result = MessageBox.Show("你确定要关闭吗！", "提示信息", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
             if (result == DialogResult.OK)
             {
@@ -147,18 +153,19 @@ namespace ClashN
 
         private void 设置系统代理ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             IsCheckedControl(设置系统代理ToolStripMenuItem, 系统代理ToolStripMenuItem);
-            
-            
+
+            YML yml = new YML(yamlConfigPath);
             string port = yml.read("port");
             SystemProxySetting("127.0.0.1:" + port);//HTTP流量接管
             yml.modify("system-proxy", "true");
             yml.save();
-
         }
 
         private void 清除系统代理ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            YML yml = new YML(yamlConfigPath);
             IsCheckedControl(清除系统代理ToolStripMenuItem, 系统代理ToolStripMenuItem);
             SystemProxySetting("");//清除代理
             yml.modify("system-proxy", "false");
@@ -212,7 +219,7 @@ namespace ClashN
             }
         }
         //LIstview的显示设置
-        public void ListShow(List<System.IO.FileInfo> list)
+        private  void ListShow(List<System.IO.FileInfo> list)
         {
 
 
@@ -230,32 +237,10 @@ namespace ClashN
         {
             //界面显示部分（Combobox）
             List<System.IO.FileInfo> files = new List<System.IO.FileInfo>();
-            string path = @"./profiles";//配置文件文件夹
-            GetFiles(path, ".yaml", ref files);//获取文件夹下的文件
+            files = utils.GetFiles(profilesDir ,".yaml");
+
             ListShow(files); //显示配置文件列表
-        }
-
-        public void InitUI()
-        {
-            YML yml = new YML(Application.StartupPath + @"/config.yaml");//YML
-
-            ReloadCombobox();
-
-            开机自启ToolStripMenuItem.Checked = bool.Parse(yml.read("auto-run"));
-            localUI = yml.read("localUI");
-            subConvert = yml.read("subConvert");
-
-            utils.KillProcess("clash");
-
-            string yamlName = yml.read("last-yaml");
-
-
-            string cmdStr = @"clash -d ./ -f ./profiles/" + yamlName + " -ext-ctl 127.0.0.1:9090 -ext-ui ui";
-            utils.CmdLine(cmdStr);
-            //TODO 需要改进删除之后异常的bug
-
-            ReloadNodeChoose();//初始化节点
-            string configItem = yml.read("last-yaml");
+            string configItem = new YML(yamlConfigPath).read("last-yaml");
             for (int i = 0; i < configChoose.Items.Count; i++)
             {
                 if (configChoose.Items[i].ToString().Equals(configItem))
@@ -263,6 +248,40 @@ namespace ClashN
                     configChoose.SelectedIndex = i;
                 }
             }
+        }
+
+        
+        public void InitUI()
+        {
+            YML yml = new YML(yamlConfigPath );//YML
+
+            
+
+            //开机自启ToolStripMenuItem.Checked = bool.Parse(yml.read("auto-run"));
+            localUI = yml.read("localUI");
+            subConvert = yml.read("subConvert");
+
+            //  utils.KillProcess("clash");
+
+
+            //string yamlName = yml.read("last-yaml");
+
+            /*            string cmdStr = @"clash -d ./ -f ./profiles/" + yamlName + " -ext-ctl 127.0.0.1:9090 -ext-ui ui";
+                        utils.CmdLine(cmdStr);*/
+            //TODO 需要改进删除之后异常的bug
+
+            if(utils.GetFiles(profilesDir ,".yaml").Count  == 0)
+            {
+                utils.CopyToFile(Application.StartupPath + @"/config.yaml", profilesDir);
+            }
+           
+            backgroundWorkerClashCore.RunWorkerAsync(); //运行clash内核，如果文件不存在则自动创建
+            
+            //Thread.Sleep(1000);
+            ReloadCombobox();//初始化对话框
+            ReloadNodeChoose();//初始化节点
+            
+
             // MessageBox.Show(configChoose.Items[1].ToString());
             string configUrl = "http://127.0.0.1:9090/configs";
 
@@ -319,9 +338,49 @@ namespace ClashN
 
         }
 
+
+        /// <summary> 
+        /// 开机启动项 
+        /// </summary> 
+        /// <param name=\"Started\">是否启动</param> 
+        /// <param name=\"name\">启动值的名称</param> 
+        /// <param name=\"path\">启动程序的路径</param> 
+        public static void RunWhenStart(bool Started, string name, string path)
+        {
+            RegistryKey HKLM = Registry.LocalMachine;
+            Microsoft.Win32.RegistryKey Run = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            if (Started == true)
+            {
+                try
+                {
+                    Run.SetValue(name, path);
+                    Run.Close();
+                }
+                catch (Exception Err)
+                {
+                    MessageBox.Show(Err.Message.ToString(), "MUS", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                try
+                {
+                    Run.DeleteValue(name);
+                    Run.Close();
+                }
+                catch (Exception)
+                {
+                    // 
+                }
+            }
+        }
+
         private void 开机自启ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("涉及到注册表修改，已移除");
+             MessageBox.Show("涉及到注册表修改，已移除");
+            //RunWhenStart(true, "ClashN", Application.StartupPath + @"\ClashN.exe");
+            
         }
 
 
@@ -331,7 +390,7 @@ namespace ClashN
 
             //TODO需要优化
             string fileName = configChoose.Text;
-            string path = Application.StartupPath+@"/profiles/" + fileName;
+            string path = profilesDir  + fileName;
             string jsonReloadData = JsonConvert.SerializeObject(new
             {
                 path = path //配置文件路径
@@ -340,15 +399,25 @@ namespace ClashN
             try 
             {
                 restfulGo.WebPut("http://127.0.0.1:9090/configs?force=false", jsonReloadData);//切换配置文件
+
+                
+                    YML yml = new YML(yamlConfigPath);
+                    yml.modify("last-yaml", fileName);
+                    // yml.modify("last-yamlIndex", configChoose.SelectedIndex.ToString());
+                    yml.save();
+
+
+
+
             } catch (Exception ex)
-            { MessageBox.Show(ex.ToString()); }
+            { 
+                MessageBox.Show(ex.ToString()+"配置文件存在问题");
+                
+            }
            
             
-            string yamlPath = Application.StartupPath + @"/config.yaml";
-            YML yml = new YML(yamlPath);
-            yml.modify("last-yaml", fileName);
-           // yml.modify("last-yamlIndex", configChoose.SelectedIndex.ToString());
-            yml.save();
+           
+
             
         }
        
@@ -415,50 +484,64 @@ namespace ClashN
         public void ReloadNodeChoose()
         {
             节点选择ToolStripMenuItem.DropDownItems.Clear();
-            //获取Key
-            string proxiesUrl = "http://127.0.0.1:9090/proxies";
-            string jsonData = restfulGo.WebGet(proxiesUrl);
-            string jsontest = utils.JsonRead(jsonData, "proxies");
-            Dictionary<string, string> map = new Dictionary<string, string>();
-            map = utils.JsonGetAllKV(jsontest);
-
-            foreach (var x in map)
-
+            int index = rulecbx.SelectedIndex; //0 global 1 rule 2 direct
+            if (index == 2)
             {
-
-
-                ToolStripMenuItem item = new ToolStripMenuItem();
-                string str = x.Key;
-
-                string str1 = x.Value;
-                JArray jarray = (JArray)utils.JsonReadAll(str1, "all");//全部节点
-                string now = utils.JsonRead(str1, "now");//当前选择节点
-                if (jarray != null)
-                {
-                    foreach (string node in jarray)
-                    {   
-                        ToolStripMenuItem secondItem = new ToolStripMenuItem(node);
-                        secondItem.Text = node;
-                        secondItem.Click += DemoClick;
-                        if(secondItem .Text.Equals(now))
-                        {
-                            secondItem.Checked = true;
-                        }
-
-                        item.DropDownItems.Add(secondItem);
-                    }
-                }
-                else
-                {
-                    continue;
-                }
-                
-
-                item.Text = str;
-                item.Name = str;
-                节点选择ToolStripMenuItem.DropDownItems.Add(item);
+              //  节点选择ToolStripMenuItem.Enabled = false;
 
             }
+            else
+            {
+                //获取Key
+                string proxiesUrl = "http://127.0.0.1:9090/proxies";
+                string jsonData = restfulGo.WebGet(proxiesUrl);
+                string jsontest = utils.JsonRead(jsonData, "proxies");
+                Dictionary<string, string> map = new Dictionary<string, string>();
+                map = utils.JsonGetAllKV(jsontest);
+                foreach (var x in map)
+                {
+                    ToolStripMenuItem item = new ToolStripMenuItem();
+                    string str = x.Key;
+
+                    string str1 = x.Value;
+                    JArray jarray = (JArray)utils.JsonReadAll(str1, "all");//全部节点
+
+
+
+                    string now = utils.JsonRead(str1, "now");//当前选择节点
+                    if (jarray != null)
+                    {
+                        if (index == 1 && (str.Equals("GLOBAL")))//如果是规则就全局
+                        {
+                            continue ;
+                        }
+                        foreach (string node in jarray)
+                        {
+                            ToolStripMenuItem secondItem = new ToolStripMenuItem(node);
+                            secondItem.Text = node;
+                            secondItem.Click += DemoClick;
+                            if (secondItem.Text.Equals(now))
+                            {
+                                secondItem.Checked = true;
+                            }
+
+                            item.DropDownItems.Add(secondItem);
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+
+                    item.Text = str;
+                    item.Name = str;
+                    节点选择ToolStripMenuItem.DropDownItems.Add(item);
+
+                }
+            }
+
+
         }
 
         public void ReloadAll()
@@ -470,9 +553,37 @@ namespace ClashN
 
         private void trayIco_Click(object sender, EventArgs e)
         {
-           // ReloadAll();
-
+           
             
+        }
+
+        private void 节点选择ToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+        {
+            ReloadNodeChoose();
+        }
+
+        private void ClashN_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }
+
+        private void backgroundWorkerClashCore_DoWork(object sender, DoWorkEventArgs e)
+        {
+            YML yml = new YML(yamlConfigPath);
+            string yamlName = yml.read("last-yaml");
+            string cmdStr = @"clash -d ./ -f ./profiles/" + yamlName + " -ext-ctl 127.0.0.1:9090 -ext-ui ui";
+            utils.CmdLine(cmdStr);
+        }
+
+        private void 添加订阅ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AddSub().Show();
+        }
+
+
+        private void 版本更新ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

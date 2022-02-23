@@ -281,11 +281,11 @@ namespace ClashN
                 //下载uri文件到desPath本地路径
                 try
                 { webClient.DownloadFile(url, path);
-                   System.Windows.Forms.MessageBox.Show("下载成功");
+                  System.Windows.Forms.MessageBox.Show("下载成功");
                 }
-                catch
+                catch(Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show(url+"下载失败");
+                    System.Windows.Forms.MessageBox.Show(url+"下载失败"+ex.Message );
                 }
             }
         }

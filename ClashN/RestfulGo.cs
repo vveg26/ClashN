@@ -90,6 +90,7 @@ namespace ClashN
             catch (WebException ex)
             {
                 MessageBox.Show(ex.Message);
+                return null;
             }
 
 
